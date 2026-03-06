@@ -595,7 +595,7 @@
             ProofPilot transforme chaque mission réussie en page de témoignages vérifiés. En un lien. Sans effort. Pour les indépendants qui méritent d'être visibles.
         </p>
 
-        <form id="heroForm" onsubmit="return sub(event, this)">
+        <form id="heroForm" action="https://formspree.io/f/mqeykadb" method="POST" onsubmit="return sub(event, this)">
             <div class="email-wrap">
                 <input type="email" placeholder="votre@email.com" required>
                 <button type="submit" class="submit-btn">Je veux tester →</button>
@@ -775,7 +775,7 @@
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
                 Vous êtes sur la liste. On vous contacte très vite dès que l'outil est disponible.
             </div>
-            <form id="ctaForm" onsubmit="return sub(event, this)">
+            <form id="ctaForm" action="https://formspree.io/f/mqeykadb" method="POST" onsubmit="return sub(event, this)">
                 <div class="email-wrap">
                     <input type="email" placeholder="votre@email.com" required>
                     <button type="submit" class="submit-btn">Réserver ma place →</button>
@@ -807,18 +807,34 @@
     }, { threshold: 0.12 });
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-    // Form submit
-    function sub(e, form) {
+    // Form submit → Formspree
+    async function sub(e, form) {
         e.preventDefault();
-        const email = form.querySelector('input').value;
-        const list  = JSON.parse(localStorage.getItem('pp_list') || '[]');
-        list.push({ email, ts: Date.now() });
-        localStorage.setItem('pp_list', JSON.stringify(list));
-        form.style.display = 'none';
-        const okEl = form.id === 'heroForm'
-            ? document.getElementById('heroOk')
-            : document.getElementById('ctaOk');
-        okEl.style.display = 'flex';
+        const btn = form.querySelector('button');
+        btn.disabled = true;
+        btn.textContent = 'Envoi…';
+        try {
+            const res = await fetch('https://formspree.io/f/mqeykadb', {
+                method: 'POST',
+                headers: { 'Accept': 'application/json' },
+                body: new FormData(form)
+            });
+            if (res.ok) {
+                form.style.display = 'none';
+                const okEl = form.id === 'heroForm'
+                    ? document.getElementById('heroOk')
+                    : document.getElementById('ctaOk');
+                okEl.style.display = 'flex';
+            } else {
+                btn.disabled = false;
+                btn.textContent = form.id === 'heroForm' ? 'Je veux tester →' : 'Réserver ma place →';
+                alert('Une erreur est survenue. Réessayez.');
+            }
+        } catch {
+            btn.disabled = false;
+            btn.textContent = form.id === 'heroForm' ? 'Je veux tester →' : 'Réserver ma place →';
+            alert('Une erreur est survenue. Réessayez.');
+        }
         return false;
     }
 </script>
