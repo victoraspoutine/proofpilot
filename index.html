@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProofPilot — Transformez vos clients satisfaits en preuves visibles</title>
+    <meta name="description" content="L'outil qui transforme automatiquement chaque mission réussie en preuve sociale. Pour artisans, coachs, thérapeutes et indépendants.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg:        #ffffff;
+            --ink:       #111111;
+            --ink-2:     #374151;
+            --ink-3:     #6b7280;
+            --ink-4:     #9ca3af;
+            --orange:    #f05a28;
+            --orange-d:  #d44a1a;
+            --orange-bg: #fff4f1;
+            --orange-br: #fcd9cc;
+            --surface:   #f9fafb;
+            --border:    #e5e7eb;
+            --border-d:  #d1d5db;
+            --green:     #16a34a;
+            --green-bg:  #f0fdf4;
+            --font-d: 'Instrument Serif', Georgia, serif;
+            --font-u: 'Inter', -apple-system, sans-serif;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-u);
+            color: var(--ink);
+            background: var(--bg);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ─── NAV ─── */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            padding: 0 3rem;
+            height: 64px;
+            display: flex; align-items: center; justify-content: space-between;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s;
+        }
+        nav.scrolled { border-bottom-color: var(--border); }
+
+        .logo {
+            font-family: var(--font-u);
+            font-weight: 700; font-size: 1rem;
+            letter-spacing: -0.02em;
+            color: var(--ink);
+            text-decoration: none;
+            display: flex; align-items: center; gap: 0.6rem;
+        }
+        .logo-sq {
+            width: 30px; height: 30px;
+            background: var(--orange);
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 0.8rem; font-weight: 700;
+        }
+
+        .nav-actions { display: flex; align-items: center; gap: 1rem; }
+        .nav-link {
+            font-size: 0.875rem; font-weight: 500;
+            color: var(--ink-3);
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+        .nav-link:hover { color: var(--ink); }
+
+        .nav-btn {
+            font-family: var(--font-u);
+            font-size: 0.875rem; font-weight: 600;
+            color: white;
+            background: var(--orange);
+            text-decoration: none;
+            padding: 0.5rem 1.25rem;
+            border-radius: 6px;
+            transition: background 0.15s;
+        }
+        .nav-btn:hover { background: var(--orange-d); }
+
+        /* ─── HERO ─── */
+        .hero {
+            padding-top: 64px;
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 3rem; padding-right: 3rem;
+            align-items: center;
+        }
+
+        .hero-left {
+            padding: 5rem 4rem 5rem 0;
+            border-right: 1px solid var(--border);
+        }
+
+        .hero-tag {
+            display: inline-flex; align-items: center; gap: 0.45rem;
+            font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--orange);
+            margin-bottom: 2rem;
+        }
+        .tag-dot {
+            width: 6px; height: 6px;
+            background: var(--orange);
+            border-radius: 50%;
+            animation: blink 2s ease infinite;
+        }
+        @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.2;} }
+
+        .hero h1 {
+            font-family: var(--font-d);
+            font-size: clamp(2.8rem, 4.5vw, 4.2rem);
+            font-weight: 400;
+            line-height: 1.12;
+            letter-spacing: -0.01em;
+            margin-bottom: 1.5rem;
+            color: var(--ink);
+        }
+        .hero h1 em {
+            font-style: italic;
+            color: var(--orange);
+        }
+
+        .hero-sub {
+            font-size: 1rem;
+            color: var(--ink-3);
+            line-height: 1.7;
+            max-width: 420px;
+            margin-bottom: 2.5rem;
+        }
+
+        /* form */
+        .email-wrap {
+            display: flex;
+            max-width: 440px;
+            border: 1.5px solid var(--border-d);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+        .email-wrap:focus-within { border-color: var(--orange); }
+        .email-wrap input {
+            font-family: var(--font-u);
+            font-size: 0.9rem; flex: 1;
+            padding: 0.85rem 1rem;
+            border: none; outline: none;
+            background: white;
+            color: var(--ink);
+        }
+        .email-wrap input::placeholder { color: var(--ink-4); }
+        .submit-btn {
+            font-family: var(--font-u);
+            font-size: 0.85rem; font-weight: 600;
+            color: white;
+            background: var(--orange);
+            border: none;
+            padding: 0.85rem 1.4rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.15s;
+        }
+        .submit-btn:hover { background: var(--orange-d); }
+
+        .form-note {
+            margin-top: 0.75rem;
+            font-size: 0.78rem;
+            color: var(--ink-4);
+        }
+
+        .ok-msg {
+            display: none;
+            align-items: center; gap: 0.5rem;
+            background: var(--green-bg);
+            color: var(--green);
+            border: 1px solid #bbf7d0;
+            padding: 0.8rem 1.1rem;
+            border-radius: 8px;
+            font-size: 0.875rem; font-weight: 500;
+            max-width: 440px;
+        }
+
+        /* ─── HERO RIGHT: product mockup ─── */
+        .hero-right {
+            padding: 5rem 0 5rem 4rem;
+        }
+
+        .mockup {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 8px 32px rgba(0,0,0,0.07);
+            overflow: hidden;
+        }
+        .mkp-top {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .mkp-dots { display: flex; gap: 6px; }
+        .mkp-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: var(--border-d);
+        }
+        .mkp-url {
+            font-size: 0.72rem; color: var(--ink-4);
+            background: var(--surface);
+            padding: 0.3rem 0.9rem;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+        }
+
+        .mkp-body { padding: 1.5rem; }
+
+        .mkp-profile {
+            display: flex; align-items: center; gap: 1rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 1.25rem;
+        }
+        .mkp-av {
+            width: 48px; height: 48px; border-radius: 50%;
+            background: linear-gradient(135deg, #4ade80, #f05a28);
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: 700; font-size: 1rem;
+            flex-shrink: 0;
+        }
+        .mkp-name {
+            font-family: var(--font-d);
+            font-size: 1.05rem; font-weight: 400; color: var(--ink);
+        }
+        .mkp-role { font-size: 0.75rem; color: var(--ink-3); margin-top: 0.1rem; }
+
+        .mkp-stats {
+            display: flex; gap: 1.25rem;
+        }
+        .mkp-stat { text-align: center; }
+        .mkp-val {
+            font-family: var(--font-d);
+            font-size: 1.5rem; color: var(--ink); font-weight: 400;
+        }
+        .mkp-lbl { font-size: 0.68rem; color: var(--ink-3); margin-top: 0.1rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+        .mkp-divider { height: 1px; background: var(--border); margin: 1.25rem 0; }
+
+        .mkp-review {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem 1.1rem;
+            margin-bottom: 0.75rem;
+        }
+        .mkp-stars { color: #f59e0b; font-size: 0.8rem; letter-spacing: 1px; margin-bottom: 0.45rem; }
+        .mkp-text { font-size: 0.82rem; color: var(--ink-2); line-height: 1.55; }
+        .mkp-author { font-size: 0.72rem; color: var(--ink-4); margin-top: 0.4rem; }
+
+        .mkp-badge {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            background: var(--green-bg);
+            color: var(--green);
+            border: 1px solid #bbf7d0;
+            padding: 0.35rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.7rem; font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        /* ─── STATS BAR ─── */
+        .stats-bar {
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+        }
+        .stat-item {
+            flex: 1;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            border-right: 1px solid var(--border);
+        }
+        .stat-item:last-child { border-right: none; }
+        .stat-num {
+            font-family: var(--font-d);
+            font-size: 2.8rem; font-weight: 400;
+            color: var(--ink); line-height: 1;
+            margin-bottom: 0.4rem;
+        }
+        .stat-num span { color: var(--orange); }
+        .stat-lbl { font-size: 0.82rem; color: var(--ink-3); line-height: 1.45; }
+
+        /* ─── SHARED SECTION STYLES ─── */
+        .sec-label {
+            font-size: 0.72rem; font-weight: 700;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--orange);
+            margin-bottom: 1.1rem;
+            display: flex; align-items: center; gap: 0.6rem;
+        }
+        .sec-label::before { content: ''; width: 18px; height: 2px; background: var(--orange); }
+
+        /* ─── PROBLEM ─── */
+        .problem-wrap {
+            max-width: 1200px; margin: 0 auto;
+            padding: 8rem 3rem;
+            display: grid; grid-template-columns: 5fr 7fr;
+            gap: 6rem; align-items: start;
+        }
+
+        .prob-h {
+            font-family: var(--font-d);
+            font-size: clamp(1.9rem, 3vw, 2.8rem);
+            font-weight: 400; line-height: 1.2; color: var(--ink);
+            position: sticky; top: 5.5rem;
+        }
+        .prob-h em { font-style: italic; }
+
+        .pain-list { list-style: none; display: flex; flex-direction: column; gap: 0; }
+        .pain-item {
+            display: flex; gap: 1.1rem; align-items: flex-start;
+            padding: 1.4rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .pain-item:first-child { border-top: 1px solid var(--border); }
+        .pain-ico {
+            width: 36px; height: 36px; flex-shrink: 0;
+            background: var(--orange-bg);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem;
+        }
+        .pain-txt { font-size: 0.95rem; color: var(--ink-2); line-height: 1.65; padding-top: 0.2rem; }
+        .pain-txt strong { color: var(--ink); font-weight: 600; }
+
+        /* ─── HOW IT WORKS ─── */
+        .how-wrap {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 8rem 3rem;
+        }
+        .how-inner { max-width: 1200px; margin: 0 auto; }
+
+        .how-head {
+            display: flex; align-items: flex-end; justify-content: space-between;
+            margin-bottom: 4rem;
+            gap: 2rem;
+        }
+        .how-h {
+            font-family: var(--font-d);
+            font-size: clamp(2rem, 3.5vw, 3rem);
+            font-weight: 400; line-height: 1.2; color: var(--ink);
+        }
+        .how-h em { font-style: italic; }
+        .how-sub {
+            font-size: 0.9rem; color: var(--ink-3);
+            line-height: 1.6; max-width: 300px;
+            padding-bottom: 0.25rem;
+        }
+
+        .steps {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 2px; background: var(--border);
+            border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+        }
+        .step {
+            background: white;
+            padding: 2.25rem 2rem;
+            position: relative;
+            transition: background 0.2s;
+        }
+        .step:hover { background: #fefcfb; }
+
+        .step-n {
+            font-family: var(--font-d);
+            font-size: 4.5rem; font-weight: 400;
+            color: rgba(0,0,0,0.055);
+            line-height: 1; margin-bottom: 1.25rem;
+            letter-spacing: -0.03em;
+        }
+        .step h3 {
+            font-size: 1.05rem; font-weight: 600;
+            color: var(--ink); margin-bottom: 0.6rem;
+            letter-spacing: -0.01em;
+        }
+        .step p { font-size: 0.875rem; color: var(--ink-3); line-height: 1.65; }
+
+        .step-tag {
+            display: inline-block;
+            margin-bottom: 1rem;
+            font-size: 0.7rem; font-weight: 600;
+            letter-spacing: 0.07em; text-transform: uppercase;
+            color: var(--orange);
+            background: var(--orange-bg);
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
+        }
+
+        /* ─── WHO ─── */
+        .who-wrap {
+            max-width: 1200px; margin: 0 auto;
+            padding: 8rem 3rem;
+        }
+        .who-head { margin-bottom: 3rem; }
+        .who-h {
+            font-family: var(--font-d);
+            font-size: clamp(1.9rem, 3vw, 2.8rem);
+            font-weight: 400; line-height: 1.2; color: var(--ink);
+            max-width: 560px;
+        }
+        .who-h em { font-style: italic; }
+
+        .who-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px; background: var(--border);
+            border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+        }
+        .who-card {
+            background: white;
+            padding: 1.5rem 1.25rem;
+            transition: background 0.15s;
+            display: flex; flex-direction: column; gap: 0.6rem;
+        }
+        .who-card:hover { background: var(--orange-bg); }
+        .who-em { font-size: 1.5rem; line-height: 1; }
+        .who-lbl { font-size: 0.875rem; font-weight: 500; color: var(--ink-2); line-height: 1.35; }
+
+        /* ─── FINAL CTA ─── */
+        .cta-wrap {
+            background: var(--ink);
+            padding: 8rem 3rem;
+            text-align: center;
+            position: relative; overflow: hidden;
+        }
+        .cta-wrap::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(240,90,40,0.2) 0%, transparent 60%);
+        }
+        .cta-inner { position: relative; max-width: 640px; margin: 0 auto; }
+
+        .cta-label {
+            font-size: 0.72rem; font-weight: 700;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--orange);
+            margin-bottom: 1.25rem;
+        }
+        .cta-h {
+            font-family: var(--font-d);
+            font-size: clamp(2.4rem, 5vw, 4rem);
+            font-weight: 400; line-height: 1.12;
+            color: white; margin-bottom: 1rem;
+        }
+        .cta-h em { font-style: italic; color: var(--orange); }
+        .cta-sub {
+            font-size: 1rem; color: rgba(255,255,255,0.55);
+            line-height: 1.65; margin-bottom: 2.5rem;
+        }
+
+        .cta-form .email-wrap {
+            max-width: 460px; margin: 0 auto 1rem;
+            border-color: rgba(255,255,255,0.15);
+        }
+        .cta-form .email-wrap:focus-within { border-color: var(--orange); }
+        .cta-form .email-wrap input {
+            background: rgba(255,255,255,0.08);
+            color: white;
+        }
+        .cta-form .email-wrap input::placeholder { color: rgba(255,255,255,0.3); }
+
+        .cta-note {
+            font-size: 0.78rem; color: rgba(255,255,255,0.35); margin-top: 0.75rem;
+        }
+
+        .urgency-badge {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            margin-top: 1.5rem;
+            font-size: 0.75rem; font-weight: 600;
+            color: rgba(255,255,255,0.5);
+        }
+        .urgency-badge::before {
+            content: '';
+            width: 6px; height: 6px;
+            background: var(--orange);
+            border-radius: 50%;
+            animation: blink 1.5s infinite;
+        }
+
+        .cta-ok {
+            display: none;
+            justify-content: center; align-items: center; gap: 0.5rem;
+            background: rgba(22,163,74,0.15);
+            color: #4ade80;
+            border: 1px solid rgba(74,222,128,0.25);
+            padding: 0.8rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.875rem; font-weight: 500;
+            max-width: 460px; margin: 0 auto 1rem;
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 1.5rem 3rem;
+            display: flex; align-items: center; justify-content: space-between;
+            font-size: 0.78rem; color: var(--ink-4);
+        }
+
+        /* ─── REVEAL ─── */
+        .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .reveal.on  { opacity: 1; transform: none; }
+        .d1 { transition-delay: 0.08s; }
+        .d2 { transition-delay: 0.16s; }
+
+        /* hero stagger */
+        .hero-left > * { opacity: 0; animation: up 0.65s ease forwards; }
+        .hero-left > *:nth-child(1){ animation-delay:0.1s; }
+        .hero-left > *:nth-child(2){ animation-delay:0.22s; }
+        .hero-left > *:nth-child(3){ animation-delay:0.34s; }
+        .hero-left > *:nth-child(4){ animation-delay:0.46s; }
+        .hero-left > *:nth-child(5){ animation-delay:0.55s; }
+        .hero-right { opacity: 0; animation: up 0.7s ease 0.5s forwards; }
+        @keyframes up { from{opacity:0;transform:translateY(18px);} to{opacity:1;transform:none;} }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 900px) {
+            nav { padding: 0 1.5rem; }
+            .hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 3rem; min-height: auto; }
+            .hero-left { padding: 0 0 2.5rem; border-right: none; border-bottom: 1px solid var(--border); }
+            .hero-right { padding: 2.5rem 0 0; }
+            .problem-wrap { grid-template-columns: 1fr; gap: 2.5rem; padding: 5rem 1.5rem; }
+            .prob-h { position: static; }
+            .how-wrap { padding: 5rem 1.5rem; }
+            .how-head { flex-direction: column; align-items: flex-start; }
+            .steps { grid-template-columns: 1fr; }
+            .stats-bar { flex-direction: column; }
+            .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
+            .stat-item:last-child { border-bottom: none; }
+            .who-wrap { padding: 5rem 1.5rem; }
+            .who-grid { grid-template-columns: repeat(2, 1fr); }
+            .cta-wrap { padding: 5rem 1.5rem; }
+            footer { flex-direction: column; gap: 0.4rem; padding: 1.25rem 1.5rem; text-align: center; }
+        }
+        @media (max-width: 600px) {
+            .email-wrap { flex-direction: column; border-radius: 8px; overflow: hidden; }
+            .email-wrap input { border-radius: 0; }
+            .submit-btn { border-radius: 0; padding: 0.85rem; text-align: center; }
+            .who-grid { grid-template-columns: 1fr 1fr; }
+            nav .nav-link { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav id="nav">
+    <a href="#" class="logo">
+        <div class="logo-sq">P</div>
+        ProofPilot
+    </a>
+    <div class="nav-actions">
+        <a href="#how" class="nav-link">Comment ça marche</a>
+        <a href="#cta" class="nav-btn">Accès anticipé</a>
+    </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+    <div class="hero-left">
+        <div class="hero-tag">
+            <span class="tag-dot"></span>
+            Accès anticipé — Gratuit pour les 200 premiers
+        </div>
+
+        <h1>Vos clients sont<br>satisfaits. Faites-le<br><em>savoir.</em></h1>
+
+        <p class="hero-sub">
+            ProofPilot transforme chaque mission réussie en page de témoignages vérifiés. En un lien. Sans effort. Pour les indépendants qui méritent d'être visibles.
+        </p>
+
+        <form id="heroForm" onsubmit="return sub(event, this)">
+            <div class="email-wrap">
+                <input type="email" placeholder="votre@email.com" required>
+                <button type="submit" class="submit-btn">Je veux tester →</button>
+            </div>
+        </form>
+
+        <div class="ok-msg" id="heroOk">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            Vous êtes sur la liste. On vous contacte très vite.
+        </div>
+
+        <p class="form-note">Gratuit. Sans carte bancaire. Accessible sans compétences techniques.</p>
+    </div>
+
+    <div class="hero-right">
+        <div class="mockup">
+            <div class="mkp-top">
+                <div class="mkp-dots">
+                    <div class="mkp-dot"></div>
+                    <div class="mkp-dot"></div>
+                    <div class="mkp-dot"></div>
+                </div>
+                <div class="mkp-url">proofpilot.fr/sophie-laurent</div>
+                <div style="width:46px"></div>
+            </div>
+            <div class="mkp-body">
+                <div class="mkp-profile">
+                    <div class="mkp-av">SL</div>
+                    <div>
+                        <div class="mkp-name">Sophie Laurent</div>
+                        <div class="mkp-role">Coach en nutrition · Lyon</div>
+                    </div>
+                    <div class="mkp-stats" style="margin-left:auto;text-align:right">
+                        <div class="mkp-stat">
+                            <div class="mkp-val">4.9</div>
+                            <div class="mkp-lbl">Note</div>
+                        </div>
+                        <div class="mkp-stat">
+                            <div class="mkp-val">47</div>
+                            <div class="mkp-lbl">Avis</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mkp-review">
+                    <div class="mkp-stars">★★★★★</div>
+                    <div class="mkp-text">"En 3 mois, j'ai retrouvé mon énergie et perdu 8kg sans régime. Sophie est exceptionnelle."</div>
+                    <div class="mkp-author">— Marie D. · mars 2026</div>
+                </div>
+
+                <div class="mkp-review">
+                    <div class="mkp-stars">★★★★★</div>
+                    <div class="mkp-text">"Approche bienveillante, résultats concrets. Je recommande à 100%."</div>
+                    <div class="mkp-author">— Thomas R. · fév. 2026</div>
+                </div>
+
+                <div class="mkp-badge">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                    Profil vérifié ProofPilot
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ─── STATS ─── -->
+<div class="stats-bar reveal">
+    <div class="stat-item">
+        <div class="stat-num">72<span>%</span></div>
+        <div class="stat-lbl">des clients choisissent<br>un prestataire avec des avis</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-num">90<span>s</span></div>
+        <div class="stat-lbl">pour qu'un client laisse<br>un témoignage complet</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-num">3<span>min</span></div>
+        <div class="stat-lbl">pour créer votre page<br>de preuves sociales</div>
+    </div>
+</div>
+
+<!-- ─── PROBLEM ─── -->
+<section>
+    <div class="problem-wrap">
+        <div class="reveal">
+            <div class="sec-label">Le problème</div>
+            <h2 class="prob-h">Vous faites un travail exceptionnel.<br><em>Personne ne le voit.</em></h2>
+        </div>
+
+        <div class="reveal d1">
+            <ul class="pain-list">
+                <li class="pain-item">
+                    <span class="pain-ico">😤</span>
+                    <span class="pain-txt"><strong>Vos concurrents moins qualifiés vous piquent des clients</strong> parce qu'ils ont plus d'avis Google que vous.</span>
+                </li>
+                <li class="pain-item">
+                    <span class="pain-ico">📱</span>
+                    <span class="pain-txt">Vous demandez des témoignages par SMS, le client dit <strong>"oui bien sûr"…</strong> et ne le fait jamais.</span>
+                </li>
+                <li class="pain-item">
+                    <span class="pain-ico">🕳️</span>
+                    <span class="pain-txt">Vos meilleurs résultats <strong>disparaissent dans WhatsApp</strong> et les e-mails oubliés.</span>
+                </li>
+                <li class="pain-item">
+                    <span class="pain-ico">💸</span>
+                    <span class="pain-txt">Les outils de gestion d'avis coûtent <strong>100 à 300€/mois.</strong> Pour un indépendant, c'est délirant.</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ─── HOW IT WORKS ─── -->
+<section class="how-wrap" id="how">
+    <div class="how-inner">
+        <div class="how-head reveal">
+            <div>
+                <div class="sec-label">Comment ça marche</div>
+                <h2 class="how-h">Trois étapes.<br><em>Zéro prise de tête.</em></h2>
+            </div>
+            <p class="how-sub">Pas de formation, pas de configuration complexe. Vous êtes opérationnel en quelques minutes.</p>
+        </div>
+
+        <div class="steps reveal d1">
+            <div class="step">
+                <div class="step-n">01</div>
+                <div class="step-tag">Après la mission</div>
+                <h3>Envoyez un lien</h3>
+                <p>Après chaque mission, envoyez votre lien ProofPilot au client par SMS, WhatsApp ou email. Un clic, c'est tout.</p>
+            </div>
+            <div class="step">
+                <div class="step-n">02</div>
+                <div class="step-tag">Côté client</div>
+                <h3>Le client témoigne</h3>
+                <p>3 questions simples, une note, une photo optionnelle. Votre client en a pour 90 secondes. Pas de compte à créer.</p>
+            </div>
+            <div class="step">
+                <div class="step-n">03</div>
+                <div class="step-tag">Automatique</div>
+                <h3>Votre page se construit</h3>
+                <p>Une page publique avec vos témoignages, vos stats et un badge "vérifié". Partagez-la partout. Elle travaille pour vous 24h/24.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ─── WHO ─── -->
+<section>
+    <div class="who-wrap">
+        <div class="who-head reveal">
+            <div class="sec-label">Pour qui ?</div>
+            <h2 class="who-h">Si vous êtes <em>indépendant,</em><br>c'est pour vous.</h2>
+        </div>
+
+        <div class="who-grid reveal d1">
+            <div class="who-card"><span class="who-em">🔧</span><span class="who-lbl">Artisans & rénovation</span></div>
+            <div class="who-card"><span class="who-em">💆</span><span class="who-lbl">Thérapeutes & bien-être</span></div>
+            <div class="who-card"><span class="who-em">📸</span><span class="who-lbl">Photographes & créatifs</span></div>
+            <div class="who-card"><span class="who-em">🏋️</span><span class="who-lbl">Coachs sportifs & nutrition</span></div>
+            <div class="who-card"><span class="who-em">🎓</span><span class="who-lbl">Formateurs & profs particuliers</span></div>
+            <div class="who-card"><span class="who-em">💻</span><span class="who-lbl">Freelances & consultants</span></div>
+            <div class="who-card"><span class="who-em">🐕</span><span class="who-lbl">Services aux animaux</span></div>
+            <div class="who-card"><span class="who-em">🏠</span><span class="who-lbl">Services à domicile</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- ─── FINAL CTA ─── -->
+<section class="cta-wrap" id="cta">
+    <div class="cta-inner reveal">
+        <div class="cta-label">Accès anticipé</div>
+        <h2 class="cta-h">Soyez parmi<br>les <em>premiers.</em></h2>
+        <p class="cta-sub">Les 200 premiers inscrits auront un accès gratuit à vie au plan Pro.<br>Pas de piège, pas de carte bancaire.</p>
+
+        <div class="cta-form">
+            <div class="cta-ok" id="ctaOk">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                Vous êtes sur la liste. On vous contacte très vite.
+            </div>
+            <form id="ctaForm" onsubmit="return sub(event, this)">
+                <div class="email-wrap">
+                    <input type="email" placeholder="votre@email.com" required>
+                    <button type="submit" class="submit-btn">Réserver ma place →</button>
+                </div>
+            </form>
+            <p class="cta-note">Gratuit. Sans carte bancaire. Pour les 200 premiers.</p>
+        </div>
+
+        <div class="urgency-badge">Il reste encore des places disponibles</div>
+    </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+    <span>ProofPilot © 2026</span>
+    <span>Fait avec passion pour les indépendants qui méritent mieux.</span>
+</footer>
+
+<script>
+    // Nav scroll
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', scrollY > 50);
+    }, { passive: true });
+
+    // Reveal on scroll
+    const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    // Form submit
+    function sub(e, form) {
+        e.preventDefault();
+        const email = form.querySelector('input').value;
+        const list  = JSON.parse(localStorage.getItem('pp_list') || '[]');
+        list.push({ email, ts: Date.now() });
+        localStorage.setItem('pp_list', JSON.stringify(list));
+        form.style.display = 'none';
+        const okEl = form.id === 'heroForm'
+            ? document.getElementById('heroOk')
+            : document.getElementById('ctaOk');
+        okEl.style.display = 'flex';
+        return false;
+    }
+</script>
+</body>
+</html>
